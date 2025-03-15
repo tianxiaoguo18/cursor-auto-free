@@ -108,14 +108,16 @@ class EmailVerificationHandler:
                     continue
                 body = self._extract_imap_body(email_message)
                 if body:
-                    code_match = re.search(r"\b\d{6}\b", body)
-                    if code_match:
-                        code = code_match.group()
-                        # 删除找到验证码的邮件
-                        mail.store(mail_id, '+FLAGS', '\\Deleted')
-                        mail.expunge()
-                        mail.logout()
-                        return code
+                # 使用正则表达式查找6位数字验证码
+                code_match = re.search(r"\b\d{6}\b", body)
+                if code_match:
+                    code = code_match.group()
+                    # 删除邮件
+                    mail.store(latest_mail_id, '+FLAGS', '\\Deleted')
+                    mail.expunge()
+                    mail.logout()
+                    # print(f"找到的验证码: {code}")
+                    return code
             # print("未找到验证码")
             mail.logout()
             return None
