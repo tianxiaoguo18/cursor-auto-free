@@ -268,8 +268,10 @@ def sign_up_account(browser, tab):
                 logging.info("正在获取邮箱验证码...")
                 code = email_handler.get_verification_code()
                 if not code:
-                    logging.error("获取验证码失败")
-                    return False
+                     code = input("自动获取验证码失败，请手动输入：").strip()
+                     if not code:
+                         logging.error("获取验证码失败")
+                         return False
 
                 logging.info(f"成功获取验证码: {code}")
                 logging.info("正在输入验证码...")
